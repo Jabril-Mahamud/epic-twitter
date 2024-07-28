@@ -65,6 +65,8 @@ async function seed() {
 	console.time(`👤 Created ${totalUsers} users...`)
 	const noteImages = await getNoteImages()
 	const userImages = await getUserImages()
+	const rankings = Array.from({ length: totalUsers }, (_, index) => index + 1) // [1, 2, ..., totalUsers]
+	faker.helpers.shuffle(rankings) // Shuffle rankings for randomness
 
 	for (let index = 0; index < totalUsers; index++) {
 		const userData = createUser()
@@ -73,6 +75,7 @@ async function seed() {
 				select: { id: true },
 				data: {
 					...userData,
+					ranking: rankings[index],
 					password: { create: createPassword(userData.username) },
 					image: { create: userImages[index % userImages.length] },
 					roles: { connect: { name: 'user' } },
@@ -148,6 +151,7 @@ async function seed() {
 			email: 'kody@kcd.dev',
 			username: 'kody',
 			name: 'Kody',
+			ranking: totalUsers + 1, // Admin user with a unique ranking
 			image: { create: kodyImages.kodyUser },
 			password: { create: createPassword('kodylovesyou') },
 			connections: {

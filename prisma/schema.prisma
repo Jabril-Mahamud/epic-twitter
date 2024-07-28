@@ -15,7 +15,7 @@ model User {
   email    String  @unique
   username String  @unique
   name     String?
-  ranking  Int?    // New nullable ranking field
+  ranking  Int?  @unique  // New nullable ranking field
   
 
   createdAt DateTime @default(now())
